@@ -7,6 +7,6 @@
 
 pathInfo说明：
 index.php   =>  RunController -> run();
-index.php/rain  => RainController -> run();
-index.php/rain/run  =>RainController -> run();
+index.php?a=/rain  => RainController -> run();
+index.php?a=/rain/run  =>RainController -> run();
 
