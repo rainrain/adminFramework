@@ -32,6 +32,23 @@ function myAutoload($className){
 }
 spl_autoload_register("myAutoload");
 
+class Controller{
+	function display($controller='',$function=''){
+		if(empty($controller)){
+			$controller = $GLOBALS['CONTRLLER_NAME'];
+		}
+		if(empty($function)){
+			$function = $GLOBALS['FUNCTION_NAME'];
+		}
+		include VIEW_PATH.'/template/'.$controller.'/'.$function.'.php';
+		exit;
+
+	}
+}
+
+class Model{
+
+}
 
 
 
@@ -49,8 +66,8 @@ class RainFramwork{
 			$params = self::getParams();//这里将客户端传进来的数据换成数组给到方法里
 			self::checkParams($params);//验证客户端是不是合法
 			$runInfo = self::getRunInfo();
-			$controllerName = $runInfo[0];
-			$functionName = $runInfo[1];
+			$controllerName  = $runInfo[0];
+			$functionName    = $runInfo[1];
 			$controllerObj = new $controllerName();
 			$result = $controllerObj -> $functionName($params);
 			self::responseResult($result);
@@ -66,7 +83,7 @@ class RainFramwork{
 	private static function checkParams($params){
 		//参数验证md5(rain_{param1:12,param2:13,timestamp:时间戳})//忽略空白后的加密
 		//按照参数1值1参数2值2.。。的顺序将data里的数据组成一个字符长加密，必须带上时间戳
-
+		return;
 		$data = $params['data'];
 		$str = MD5_PREFIX;
 		foreach($data as $k=>$v){
@@ -105,9 +122,10 @@ class RainFramwork{
 	 */
 	private static function getParams(){
 		$params = file_get_contents("php://input");
-		$params = json_decode($params,true);
-		if(!is_array($params)) {
-			throw new Exception("error params format",PARAM_FORMAT_NOT_CORRECT);
+		if(empty($params)){//为空，无需处理
+
+		}else{
+			$params = json_decode($params,true);
 		}
 		return $params;
 	}
@@ -116,6 +134,7 @@ class RainFramwork{
 	/**
 	 * @return array
 	 * 根据index.php?a=/rain/rain返回要调用的信息
+	 * 设置当前调用的controller和function,供模板使用
 	 * 索引数组，第一个为controller,第二个为functionName
 	 *
 	 */
@@ -128,6 +147,8 @@ class RainFramwork{
 		}else{
 			$functionName = $info[2];
 		}
+		$GLOBALS['CONTRLLER_NAME'] = strtolower($info[1]);
+		$GLOBALS['FUNCTION_NAME'] = $functionName;
 		return array($controllerName,$functionName);
 	}
 

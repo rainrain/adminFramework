@@ -6,7 +6,7 @@
  * Date: 15/11/2
  * Time: 上午11:32
  */
-class RainController{
+class RainController extends Controller{
 
 	public function run($params){
 		//$parmas为客户端传的数据，已经在框架里转成数组
@@ -14,6 +14,10 @@ class RainController{
 		$rainModel = new RainModel();
 		$rainModel -> show();
 		return $data;
+	}
+
+	public function show(){
+		$this->display();
 	}
 
 	

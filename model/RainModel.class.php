@@ -6,7 +6,7 @@
  * Date: 15/11/2
  * Time: 上午11:32
  */
-class RainModel{
+class RainModel extends Model{
 	public function show(){
 		echo 'this is rainmodel';
 		$mongoDb = new MongoDbLibrary();
